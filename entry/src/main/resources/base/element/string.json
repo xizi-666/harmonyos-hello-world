@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "参考文献格式检查器主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "维护引用条目，检查缺字段与重复项，批量生成参考文献格式"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "参考文献格式检查器"
+    }
+  ]
+}
