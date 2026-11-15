@@ -28,9 +28,11 @@
 
 ## 三、运行步骤
 
-> **已装机提示**：本应用已经通过离线签名 + hdc 安装到了 PC（2in1）模拟器里（包名 `com.campus.refchecker`），
-> 桌面上已有「参考文献格式检查器」图标，直接点击即可运行，无需再做下面 1~5 步。
-> 只有改了代码想重新部署时，才需要按下面流程走。
+> **包名变更提示**：为与 AppGallery Connect 上已创建的应用保持一致，工程 `bundleName` 已由
+> `com.campus.refchecker` 改为 **`com.xizi001.myapplication`**（AGC 侧包名创建后不可修改，因此改工程侧）。
+> 之前通过离线签名装到模拟器里的仍是旧包名应用，新包需**先卸载旧包再重新安装**；
+> `signature/` 下的 `refchecker-profile.json` 与 `refchecker.p7b` 绑定的是旧包名，重装前必须重新生成 profile。
+> 正式上架走 DevEco Studio 26.0.0+ 的 `Build > Upload Product`（上传时自动重签名），不依赖这套本地签名材料。
 
 1. 打开 DevEco Studio → `File` → `Open`，选择目录 `D:\HarmonyProjects\RefChecker`（**不要**复制到含中文的目录下再打开）。
 2. 等待右下角 Sync 完成（首次会自动同步 hvigor 与依赖）。
@@ -74,14 +76,15 @@ hdc list targets                 # 模拟器地址 127.0.0.1:5555
 hdc install -r refchecker-signed.hap
 
 # 4) 启动
-hdc shell aa start -a EntryAbility -b com.campus.refchecker
+hdc shell aa start -a EntryAbility -b com.xizi001.myapplication
 ```
 
 关键点（踩坑记录）：
 
 - debug 类型的 profile 必须在 `debug-info.device-ids` 里写上**目标设备 UDID**
   （取法：`hdc shell bm get --udid`），否则安装报 profile 校验失败。
-- profile 的 `bundle-name` 必须与 HAP 的 bundleName 完全一致（本应用为 `com.campus.refchecker`）。
+- profile 的 `bundle-name` 必须与 HAP 的 bundleName 完全一致（本应用现为 `com.xizi001.myapplication`）。
+  改包名后旧的 `refchecker.p7b` 立即失效，需按 `signature/gen_profile.py` 重新生成并重新签名。
 - `development-certificate` 必须填与 `sign-app -appCertFile` 同一份证书链。
 - 截图用 `hdc shell snapshot_display -f /data/local/tmp/x.jpeg`（**只接受 .jpeg 后缀**），
   再用 `hdc file recv` 拉回本地（目标路径需为 Windows 格式绝对路径）。
@@ -91,7 +94,7 @@ hdc shell aa start -a EntryAbility -b com.campus.refchecker
 ```
 RefChecker
 ├── AppScope/                     应用级配置与图标
-│   ├── app.json5                 bundleName: com.campus.refchecker
+│   ├── app.json5                 bundleName: com.xizi001.myapplication（与 AGC 一致）
 │   └── resources/base/element/string.json   应用名称
 ├── build-profile.json5           工程构建配置（SDK 版本、产物配置）
 ├── hvigorfile.ts / oh-package.json5 / hvigor/

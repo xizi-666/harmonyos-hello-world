@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.campus.refchecker",
-    "vendor": "campus",
+    "bundleName": "com.xizi001.myapplication",
+    "vendor": "xizi",
     "versionCode": 1000000,
     "versionName": "1.0.0",
     "icon": "$media:layered_image",
