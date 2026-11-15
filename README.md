@@ -2,6 +2,8 @@
 
 对应《鸿蒙 PC 校园应用选题》**编号 054：参考文献格式检查器** —— 本地维护引用条目、检查缺字段与重复项、批量调整引用格式。
 
+> **上架关键参数**：应用名「参考文献格式检查器 校园科研助手」｜包名 `com.xizi001.myapplication`（与 AGC 已创建应用一致）｜开发者 魏宇航（个人开发者）｜邮箱 15706861476@163.com｜隐私政策 AGC 托管 + 应用内弹窗｜图标 `agc-assets/app_icon_1024.png`｜截图 `screenshots/agc_ready/`。详见第七节。
+
 ## 一、功能清单
 
 | 功能 | 说明 |
@@ -19,7 +21,7 @@
 
 - DevEco Studio 26.0.0.851（本机已安装在 `E:\DevEco Studio`）
 - HarmonyOS 26.0.0 SDK（API 26，DevEco 自带，无需额外下载）
-- 工程配置：`compatibleSdkVersion 5.0.0(12)`，可运行于 API 12 及以上的手机 / 平板 / PC（2in1）设备
+- 工程配置：`compatibleSdkVersion 5.0.0(12)` + **`targetSdkVersion 26.0.0`**（已按 AGC 提示升级，包内 `pack.info` 为 `compatible 12 / target 26`），可运行于 API 12 及以上的手机 / 平板 / PC（2in1）设备
 
 > **重要：工程路径必须只用英文、数字、下划线等 ASCII 字符。**
 > hvigor 会校验工程路径，中文路径（例如 `C:\Users\希杍\...`）会直接报错
@@ -96,8 +98,13 @@ RefChecker
 ├── AppScope/                     应用级配置与图标
 │   ├── app.json5                 bundleName: com.xizi001.myapplication（与 AGC 一致）
 │   └── resources/base/element/string.json   应用名称
-├── build-profile.json5           工程构建配置（SDK 版本、产物配置）
+├── build-profile.json5           工程构建配置（compatible 12 / target 26）
 ├── hvigorfile.ts / oh-package.json5 / hvigor/
+├── PRIVACY_POLICY.md             隐私政策（仓库阅读版）
+├── privacy-policy/index.html     隐私政策（静态网页版，备用）
+├── agc-assets/                   AGC 上传用图标（1024 / 216 / 512 / 原图）
+├── tools/generate_icons.py       纯标准库图标合成脚本
+├── screenshots/agc_ready/        3 张 1920x1080 上架截图（已去边框与任务栏）
 └── entry/                        主模块（entry HAP）
     ├── build-profile.json5
     └── src/main/
@@ -126,3 +133,30 @@ RefChecker
 3. **模拟器列表为空**：在 DevEco 的 `Device Manager` 中先下载并创建 PC 模拟器实例。
 4. **安装 SDK 时报 `LOCK file could not be obtained`**：上一次 SDK 下载被中断，关闭 DevEco 后删除
    `C:\ProgramData\huawei\Sdk\.temp\` 下对应目录里的 `.op.lock` 残留文件再重试。
+
+## 七、上架素材与隐私政策
+
+### 7.1 应用图标
+
+- 分层图标：`AppScope/resources/base/media/` 与 `entry/src/main/resources/base/media/` 下的 `background.png`、`foreground.png`（均为 1024×1024）+ `layered_image.json`；启动图标 `startIcon.png`（152×152）。
+- AGC 上传用：`agc-assets/app_icon_1024.png`（1024×1024）与 `app_icon_216.png`（216×216），符合官方规格，**不要自行加圆角**，由系统统一裁切。
+- `tools/generate_icons.py` 是纯 Python 标准库脚本（自写 PNG 编解码、抠白、渐变、缩放），源图为 `agc-assets/icon_source.png`；改设计后执行 `python tools/generate_icons.py` 即可重生成全套，无需安装 Pillow。
+
+### 7.2 隐私政策
+
+- 三处内容一致：`PRIVACY_POLICY.md`（阅读版）、`privacy-policy/index.html`（网页备用版）、`Index.ets` 中的 `PRIVACY_TEXT`（应用内弹窗，标题栏「隐私政策」按钮打开）。
+- **如实说明的数据行为**：本应用会用 `Preferences` 在**设备本机保存您录入的文献条目**、首次启动写入 8 条示例数据、点击复制时**写入系统剪贴板**（不读取）。应用不联网、未申请任何权限（含 `ohos.permission.INTERNET`）、无第三方 SDK、不上传或共享数据；卸载即删除全部本地数据。
+- 接入方式：**AGC「隐私声明托管」** —— 在「服务 > 协议服务」新建协议，把 `PRIVACY_POLICY.md` 内容填入托管表单，再到「版本信息 > 隐私声明」关联，AGC 生成标准政策网址。官方要求 AGC 与应用内内容一致。
+- 主体：魏宇航（个人开发者）｜15706861476@163.com｜生效 / 更新日期 2026-11-15。
+
+### 7.3 上架截图
+
+- `screenshots/agc_ready/screenshot_01..03_1920x1080.png`：PC / 2in1 横屏 **1920×1080**，单张 435 / 662 / 708 KB，已裁掉窗口标题栏、Windows 任务栏与系统托盘，等比缩放不变形。
+- 官方要求至少 3 张、单张 ≤ 5 MB、不含模拟器边框与任务栏；**不要用示意图代替真机 / 模拟器实截**。
+
+### 7.4 提交审核前待办（需本人登录 AGC 操作）
+
+- [ ] 把 **AGC 应用名改为「参考文献格式检查器 校园科研助手」**，与应用内标题、隐私政策保持一致（当前 AGC 上仍是「参考资料格式检查器」）。
+- [ ] 在 AGC 新建隐私声明托管协议并关联；补齐实名认证、APP 备案、内容分级、版权 / 软著材料、应用介绍与版本说明。
+- [ ] DevEco Studio：`Build > Build Hap(s)/APP(s) > Build APP(s)` → `Build > Upload Product` → `Sign in` → 选包 `Distribute App` → 上传类型选 **AppGallery Connect** → 等自动生成 `*-re-signed.app` 并上传；再回 AGC「准备提交」页选择软件包、提交审核。
+- `targetSdkVersion` 已升级为 `26.0.0`（包内 `compatible 12 / target 26`）；`signature/` 下的离线签名材料绑定旧包名，**仅用于本地模拟器调试**，上架不依赖它，且已加入 `.gitignore` 绝不上传。
